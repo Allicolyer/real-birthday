@@ -1,11 +1,28 @@
-const fetchOldestPerson = require("./getWiki.js");
+const fetch = require("node-fetch");
 
+//sets a defaultOldest date while waiting for fetchOldestPerson
 let defaultOldest = new Date("2 January 1903 UTC");
 let fetchedOldest;
 
-fetchOldestPerson().then(res => {
-  fetchedOldest = res;
-});
+//Fetches the list of oldest people from Wikipedia and updates the fetchedOldest person equal this value.
+fetch(
+  "https://en.wikipedia.org/w/api.php?page=List_of_the_oldest_living_people&origin=*&action=parse&format=json&prop=wikitext"
+)
+  .then(res => res.json())
+  .then(json => (fetchedOldest = parse(json)));
+
+//parses the response from wikipedia
+const parse = data => {
+  //access the wikitext
+  let wikiText = data["parse"]["wikitext"]["*"];
+  //split all of the lines
+  let wikiSections = wikiText.split("|-");
+  //access the first person in that list
+  let oldest = wikiSections[1].trim().split("\n|");
+  //access the birthday of the oldest person, add UTC
+  let oldestBirthday = new Date(`${oldest[3]} UTC`);
+  return oldestBirthday;
+};
 
 function isValidBirthday(input) {
   const oldest = fetchedOldest || defaultOldest;
@@ -20,46 +37,18 @@ function isValidBirthday(input) {
   }
 }
 
-// setInterval(function() {
-//   console.log(isValidBirthday(new Date("1903-01-01T23:59:59.999Z")));
-// }, 10);
+module.exports = isValidBirthday;
 
-// isValidBirthday is a promise until it resolves
+//Test Cases
 
-// isValidBirthday(new Date("2015"));
+// Invalid Date should return Error
+// console.log(isValidBirthday(new Date("Hi")));
 
-// console.log(oldest);
+// Valid Birthday - should return true
+// console.log(isValidBirthday(new Date("2015")));
 
-// test cases
-// inValid Date
-// should return Error
-isValidBirthday(new Date("Hi"));
+// Valid Birthday - should return true
+// console.log(isValidBirthday(new Date("2015-01-04")));
 
-//Year Only Date Constructor
-//should return true
-isValidBirthday(new Date("2015-01-01"));
-
-// //String Date
-// //should return true
-// // console.log(isValidBirthday("2015"));
-
-// //String Date
-// //should return true
-// // console.log(isValidBirthday(2015));
-
-// //String Date
-// //should return true
-// // console.log(isValidBirthday("9"));
-
-// //String Date
-// //should return true
-// // console.log(isValidBirthday(new Date("Hi")));
-
-// // let dateObject = new Date("2015");
-// // let dateCopy = new Date(dateObject);
-// // console.log(dateCopy);
-// // console.log(isValidBirthday(dateCopy));
-
-// let parser = Date.parse("2 January 1903");
-// console.log(parser);
-// console.log(Kane.valueOf());
+// Invalid Birthday - should return false
+// console.log(isValidBirthday(new Date("1815-01-04")));
