@@ -4,6 +4,8 @@ Real Birthday is the most accurate checker for valid birthdays. It fetches the b
 
 ## Documentation
 
+This package can be used both client-side and server-side.
+
 ### Installation
 
 Install using NPM or yarn
@@ -19,7 +21,7 @@ Install using NPM or yarn
 Import isRealBirthday using ES6 import syntax
 
 ```
-import { isRealBirthday } from 'real-birthday'
+import isRealBirthday from "real-birthday";
 ```
 
 or import isRealBirthday using CommonJS syntax
@@ -65,6 +67,12 @@ let bool = isRealBirthday(Date Object)
    ```
    isRealBirthday(new Date("1815-01-04"))
    ```
+
+### React Example
+
+Try an example in React on CodePen!
+
+[![Edit stupefied-wildflower-tu6mc](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/stupefied-wildflower-tu6mc?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Created by
 

@@ -1,7 +1,7 @@
 {
   "name": "real-birthday",
-  "version": "1.0.2",
-  "description": "",
+  "version": "1.0.3",
+  "description": "This package verifies any birthday against the birthday of the oldest known living person",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
